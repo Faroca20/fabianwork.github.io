@@ -1,0 +1,189 @@
+---
+title: "Materia: Actividad 1 - Metodos y Simulacion Estadistica"
+output: 
+  flexdashboard::flex_dashboard:
+    theme:
+      bg: "#FFFFFF"
+      fg: "#000000" 
+      primary: "#ED79F9"
+      base_font:
+        google: Prompt
+      code_font:
+        google: JetBrains Mono
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+# Install thematic and un-comment for themed static plots (i.e., ggplot2)
+# thematic::thematic_rmd()
+```
+
+Column {data-width=700 .tabset}
+-----------------------------------------------------------------------
+
+### Tiempos de Carrera
+
+```{r}
+library(paqueteMET)
+library(ggplot2)
+library(kableExtra)
+library(tidyverse)
+
+
+data("CarreraLuz22")
+
+ggplot(data = CarreraLuz22, aes(x = edad, y = timerun))+
+  geom_point(aes(x = edad, y = timerun), color="darkolivegreen") +
+  theme_bw() +
+  labs(x = "Edad", 
+       y = "Tiempo de Carrera(Seg)")
+
+```
+
+### Tiempo de Carrera segun el Sexo
+
+```{r}
+resumen_Sexo <-  CarreraLuz22 %>% 
+group_by(sex) %>% 
+summarise(media = mean(timerun),
+          mediana = median(timerun),
+          desviacion = sd(timerun),
+          minimo = min(timerun),
+          maximo = max(timerun),
+          cv = round((desviacion / media) * 100, 2),
+          observaciones = sum(!is.na(timerun)),
+          NAS = sum(is.na(timerun)))
+
+CarreraLuz22%>% 
+ggplot(mapping = aes(x = sex,
+                     y = timerun)) +
+  theme_classic()+
+  geom_boxplot()+ 
+  stat_summary(fun = mean, geom = "point", color = "red") +
+  labs(x = "Sexo", y = "Tiempo de Carrera (Seg)")
+
+
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Edad Participantes Categoria Veteranos 8
+
+```{r}
+His_veteranos<- CarreraLuz22 %>% 
+# group_by(categoria) %>% 
+filter(categoria=="4. Veteranos B")
+
+hist(x = His_veteranos $edad, main = "Frecuencia de Edades Categorias Veteranos 8",
+xlab = "edad", ylab = "frecuencia")
+
+```
+
+### Edad Participantes Categoria Veteranos 8 Hombres
+
+```{r}
+His_veteranos_Hombres<- CarreraLuz22 %>% 
+# group_by(categoria) %>% 
+filter(categoria=="4. Veteranos B" & sex=="Hombre")
+
+hist(x = His_veteranos_Hombres $edad, main = "Frecuencia de Edades Categorias Veteranos 8 para Hombres",
+xlab = "edad", ylab = "frecuencia")
+
+```
+
+colum {data-width="120"}
+-----------------------------------------------------------------------
+
+### **Promedio de Edad** 
+
+-----------------------------------------------------------------------
+
+```{r}
+Promedioedad <- round(mean(CarreraLuz22$edad),2)
+prom_Edad<- "37.45 Años"
+valueBox(prom_Edad, color = "yellow")
+```
+
+-----------------------------------------------------------------------
+
+### **Promedio de Tiempo** 
+
+-----------------------------------------------------------------------
+
+```{r}
+Promediotiempo <- round(mean(CarreraLuz22$timerun)/60,2)
+Promedio_Tiempo<- "65.26 Minutos"
+valueBox(Promedio_Tiempo, color="yellow")
+```
+
+-----------------------------------------------------------------------
+
+### **Numero de Participantes Hombres** 
+
+-----------------------------------------------------------------------
+
+```{r}
+Total_Hombres <-CarreraLuz22 %>% 
+filter(sex=="Hombre")
+Total_Hombres<- "1178 Hombres"
+valueBox(Total_Hombres, color="yellow")
+```
+
+-----------------------------------------------------------------------
+
+### **Numero de Participantes Mujeres** 
+
+-----------------------------------------------------------------------
+
+```{r}
+Total_Mujeres <-CarreraLuz22 %>% 
+filter(sex=="Mujer")
+Total_Mujeres<- "744 Mujeres"
+valueBox(Total_Mujeres, color="yellow")
+
+```
+
+-----------------------------------------------------------------------
+
+### **Numero de Participantes Categoria uveniles** 
+
+-----------------------------------------------------------------------
+
+```{r}
+Total_Juveniles <-CarreraLuz22 %>% 
+filter(categoria=="1. Juvenil")
+Total_Juveniles<- "19 Participantes"
+valueBox(Total_Juveniles, color="yellow")
+
+```
+
+-----------------------------------------------------------------------
+
+### **Numero de Participantes Categoria Abierta** 
+
+-----------------------------------------------------------------------
+
+```{r}
+Total_Abierta <-CarreraLuz22 %>% 
+filter(categoria=="2. Abierta")
+Total_abierta<- "1179 Participantes"
+valueBox(Total_abierta, color="yellow")
+
+```
+
+-----------------------------------------------------------------------
+
+### **Numero de Participantes Veteranos categoria A** 
+
+-----------------------------------------------------------------------
+
+```{r}
+Total_Veteranos <-CarreraLuz22 %>% 
+filter(categoria=="3. Veteranos A")
+Total_Veteranos<- "423 Participantes"
+valueBox(Total_Veteranos, color="yellow")
+
+```
