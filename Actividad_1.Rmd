@@ -148,7 +148,7 @@ valueBox(Total_Mujeres, color="yellow")
 
 -----------------------------------------------------------------------
 
-### **Numero de Participantes Categoria uveniles** 
+### **Numero de Participantes Categoria Juveniles** 
 
 -----------------------------------------------------------------------
 
